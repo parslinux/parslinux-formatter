@@ -2,8 +2,8 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# Emin fedar <emin.fedar@pardus.org.tr>, 2020.
-# Fatih Altun <fatih.altun@pardus.org.tr>, 2023-2026.
+# ParsLinux Geliştirici Topluluğu <dev@pars.org.tr>, 2020.
+# ParsLinux Geliştirici Topluluğu <dev@pars.org.tr>, 2023-2026.
 #
 msgid ""
 msgstr ""
@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 16:36+0300\n"
 "PO-Revision-Date: 2026-07-15 00:03+0300\n"
-"Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
-"Language-Team: Turkish <dev@pardus.org.tr>\n"
+"Last-Translator: ParsLinux Geliştirici Topluluğu <dev@pars.org.tr>\n"
+"Language-Team: Turkish <dev@pars.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -48,14 +48,12 @@ msgstr ""
 "Devam etmek istiyor musunuz?"
 
 #: ui/MainWindow.glade:240 ui/MainWindow.glade:825
-#, fuzzy
 msgid "ParsLinux Formatter"
-msgstr "Pardus USB Biçimlendirici"
+msgstr "ParsLinux Biçimlendirici"
 
 #: ui/MainWindow.glade:278
-#, fuzzy
 msgid "<b><big>ParsLinux Formatter</big></b>"
-msgstr "<b><big>Pardus USB Biçimlendirici</big></b>"
+msgstr "<b><big>ParsLinux Biçimlendirici</big></b>"
 
 #: ui/MainWindow.glade:434
 msgid "New Device Name"
@@ -106,9 +104,8 @@ msgid "Format another device."
 msgstr "Başka bir cihaz biçimlendir."
 
 #: src/MainWindow.py:69
-#, fuzzy
 msgid "ParsLinux USB Formatter"
-msgstr "Pardus USB Biçimlendirici"
+msgstr "ParsLinux USB Biçimlendirici"
 
 #: src/MainWindow.py:75
 msgid "Hakkında — ParsLinux USB Biçimlendirici"

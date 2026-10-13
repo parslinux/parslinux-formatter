@@ -1,6 +1,6 @@
-# Portuguese translation for pardus-usb-formatter.
+# Portuguese translation for parslinux-formatter.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the pardus-usb-formatter package.
+# This file is distributed under the same license as the parslinux-formatter package.
 # Hugo Carvalho <hugokarvalho@hotmail.com>, 2022, 2023, 2024, 2025, 2026.
 #
 msgid ""
@@ -46,14 +46,12 @@ msgstr ""
 "Quer continuar?"
 
 #: ui/MainWindow.glade:240 ui/MainWindow.glade:825
-#, fuzzy
 msgid "ParsLinux Formatter"
-msgstr "Formatador USB Pardus"
+msgstr "Formatador USB ParsLinux"
 
 #: ui/MainWindow.glade:278
-#, fuzzy
 msgid "<b><big>ParsLinux Formatter</big></b>"
-msgstr "<b><big>Formatador USB Pardus</big></b>"
+msgstr "<b><big>Formatador USB ParsLinux</big></b>"
 
 #: ui/MainWindow.glade:434
 msgid "New Device Name"
@@ -104,9 +102,8 @@ msgid "Format another device."
 msgstr "Formatar outro dispositivo."
 
 #: src/MainWindow.py:69
-#, fuzzy
 msgid "ParsLinux USB Formatter"
-msgstr "Formatador USB Pardus"
+msgstr "Formatador USB ParsLinux"
 
 #: src/MainWindow.py:75
 msgid "Hakkında — ParsLinux USB Biçimlendirici"

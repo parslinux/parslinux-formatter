@@ -73,13 +73,19 @@ sudo apt install -y python3-gi gir1.2-gtk-3.0 gir1.2-gtk-4.0 gir1.2-adwaita-1 \
                     btrfs-progs xfsprogs f2fs-tools cryptsetup parted policykit-1
 ```
 
-### Kaynak Koddan Çalıştırma:
+### Tek Komutla Kurulum & Yerel Çalıştırma:
 ```bash
-# Modern GTK4 Arayüzü:
-./parslinux-formatter-gtk4
+# 1. Sisteme Kurulum:
+sudo ./install.sh
 
-# Bağımsız Komut Satırı Arayüzü:
-./parslinux-formatter-cli --list
+# 2. Yerel Çalıştırma (Kurmadan test etmek için):
+./run.sh            # Modern GTK4 Arayüzü
+./run.sh gtk3       # Klasik GTK3 Arayüzü
+./run.sh cli --list # Komut satırı (CLI) modu
+./run.sh test       # Birim testlerini çalıştır
+
+# 3. Sistemden Kaldırma:
+sudo ./uninstall.sh
 ```
 
 ---

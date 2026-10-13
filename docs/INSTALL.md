@@ -34,10 +34,22 @@ sudo apt install -y \
 
 ---
 
-## 🚀 2. Kaynak Koddan Kurulum (setup.py)
+## 🚀 2. Otomatik Kurulum ve Kaldırma (Tavsiye Edilen)
 
-Depoyu yerel sisteme kurmak için kök dizinde:
+Depoyu tek komutla tüm bağımlılıkları ve PolicyKit kurallarıyla kurmak için:
 
+```bash
+# Otomatik kurulum
+sudo ./install.sh
+
+# Kurmadan yerel test etmek için:
+./run.sh
+
+# Sistemden temiz kaldırma:
+sudo ./uninstall.sh
+```
+
+Alternatif olarak doğrudan `setup.py` ile:
 ```bash
 # Dil çevirilerini (.mo) derleyip sisteme kur
 sudo python3 setup.py install --prefix=/usr

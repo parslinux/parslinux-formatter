@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# ParsLinux Formatter — Ana Başlatıcı
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+if [ -d "$ROOT_DIR/src" ]; then
+    SRC_DIR="$ROOT_DIR/src"
+elif [ -d "/usr/share/parslinux/parslinux-formatter/src" ]; then
+    SRC_DIR="/usr/share/parslinux/parslinux-formatter/src"
+else
+    SRC_DIR="$SCRIPT_DIR/src"
+fi
+
+export PYTHONPATH="$SRC_DIR:$PYTHONPATH"
+exec python3 "$SRC_DIR/entrypoint.py" "$@"

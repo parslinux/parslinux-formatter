@@ -55,6 +55,7 @@ data_files = [
     (
         "/usr/share/parslinux/parslinux-formatter/src",
         [
+            "src/entrypoint.py",
             "src/Main.py",
             "src/MainWindow.py",
             "src/ModernWindow.py",
@@ -71,10 +72,6 @@ data_files = [
         ["tr.org.parslinux.pkexec.parslinux-formatter.policy"],
     ),
     (
-        "/usr/bin/",
-        ["parslinux-formatter", "parslinux-formatter-cli", "parslinux-formatter-gtk4"],
-    ),
-    (
         "/usr/share/icons/hicolor/scalable/apps/",
         ["assets/parslinux-formatter.svg"],
     ),
@@ -88,7 +85,7 @@ setup(
     name="ParsLinux Formatter",
     version=version,
     packages=find_packages(),
-    scripts=["parslinux-formatter", "parslinux-formatter-cli", "parslinux-formatter-gtk4"],
+    scripts=["bin/parslinux-formatter", "bin/parslinux-formatter-cli", "bin/parslinux-formatter-gtk4"],
     install_requires=["PyGObject"],
     data_files=data_files,
     author="ParsLinux Developers",
