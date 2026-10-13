@@ -1,22 +1,27 @@
 #!/usr/bin/python3
+"""ParsLinux Formatter — Klasik GTK3 Arayüz Denetleyicisi (MainWindow.py).
+
+Geriye dönük uyumluluk için GTK3/Glade altyapısını destekler,
+güvenli PolicyKit yetkilendirmesi, işbirlikçi iptal ve dinamik udev
+olay dinleme mekanizması içerir.
+"""
 
 import locale
 from locale import gettext as _
-from USBDeviceManager import USBDeviceManager
 import os
 import subprocess
+import sys
 
 import gi
-
 gi.require_version("Gtk", "3.0")
-from gi.repository import GLib, Gio, Gtk  # noqa
+from gi.repository import GLib, Gio, Gtk
 
+from USBDeviceManager import USBDeviceManager, validate_usb_drive, DriveError
+from Utils import format_duration, format_size
 
-# Translation Constants:
-APPNAME = "pardus-usb-formatter"
+APPNAME = "parslinux-formatter"
 TRANSLATIONS_PATH = "/usr/share/locale"
 
-# Translation functions:
 locale.bindtextdomain(APPNAME, TRANSLATIONS_PATH)
 locale.textdomain(APPNAME)
 
@@ -24,17 +29,16 @@ locale.textdomain(APPNAME)
 class MainWindow:
     def __init__(self, application, dev_file=None):
         self.dev_file = dev_file
+        self.writerProcessPID = None
+        self.writerStdin = None
+        self.cancelled = False
 
         # Gtk Builder
         self.builder = Gtk.Builder()
-
-        # Translate things on glade:
         self.builder.set_translation_domain(APPNAME)
 
-        # Import UI file:
-        self.builder.add_from_file(
-            os.path.dirname(os.path.abspath(__file__)) + "/../ui/MainWindow.glade"
-        )
+        ui_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ui", "MainWindow.glade")
+        self.builder.add_from_file(ui_file)
         self.builder.connect_signals(self)
 
         # Window
@@ -45,50 +49,51 @@ class MainWindow:
 
         self.defineComponents()
 
-        # Get inserted USB devices
+        # USB Manager
         self.usbDevice = []
         self.usbManager = USBDeviceManager()
-        self.cryptOk = True
         self.usbManager.setUSBRefreshSignal(self.listUSBDevices)
         self.listUSBDevices()
 
-        # Set version
-        # If can't get from `./__version__` file then accept version in MainWindow.glade file
-        with open(
-            os.path.dirname(os.path.abspath(__file__)) + "/__version__"
-        ) as version_file:
-            version = version_file.readline()
-            self.dialog_about.set_version(version)
+        # Sürüm ve Hakkında Bilgileri
+        version = "1.0.0"
+        ver_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "__version__")
+        if os.path.exists(ver_file):
+            try:
+                with open(ver_file, "r") as f:
+                    version = f.read().strip()
+            except OSError:
+                pass
 
-        self.dialog_about.set_program_name(_("Pardus USB Formatter"))
+        self.dialog_about.set_version(version)
+        self.dialog_about.set_program_name(_("ParsLinux USB Formatter"))
+        self.dialog_about.set_logo_icon_name("parslinux-formatter")
+
         if self.dialog_about.get_titlebar() is None:
             about_headerbar = Gtk.HeaderBar.new()
             about_headerbar.set_show_close_button(True)
-            about_headerbar.set_title(_("About Pardus USB Formatter"))
-            about_headerbar.pack_start(Gtk.Image.new_from_icon_name("pardus-usb-formatter", Gtk.IconSize.LARGE_TOOLBAR))
+            about_headerbar.set_title(_("Hakkında — ParsLinux USB Biçimlendirici"))
+            about_headerbar.pack_start(
+                Gtk.Image.new_from_icon_name("parslinux-formatter", Gtk.IconSize.LARGE_TOOLBAR)
+            )
             about_headerbar.show_all()
             self.dialog_about.set_titlebar(about_headerbar)
 
-        # Set application:
         self.application = application
         self.cb_encrypt.connect("toggled", self.onEncryptChanged)
 
-        # Show Screen:
         self.window.show_all()
 
     def onEncryptChanged(self, *args):
-        self.ui_revealer_encrypt.set_reveal_child(
-            self.cb_encrypt.get_active()
-        )
+        self.ui_revealer_encrypt.set_reveal_child(self.cb_encrypt.get_active())
 
-    # Window methods:
     def onDestroy(self, action):
         self.window.get_application().quit()
 
     def defineComponents(self):
         self.stack_windows = self.builder.get_object("stack_windows")
 
-        # Main
+        # Main bileşenler
         self.txt_deviceName = self.builder.get_object("txt_deviceName")
         self.txt_password = self.builder.get_object("txt_password")
         self.list_devices = self.builder.get_object("list_devices")
@@ -100,27 +105,26 @@ class MainWindow:
         self.btn_cancelWriting = self.builder.get_object("btn_cancelWriting")
         self.ui_revealer_encrypt = self.builder.get_object("ui_revealer_encrypt")
 
-        # Integrity
+        # Seçenekler
         self.cb_slowFormat = self.builder.get_object("cb_slowFormat")
         self.cb_encrypt = self.builder.get_object("cb_encrypt")
 
-        # Dialog:
+        # Diyaloglar
         self.dialog_write = self.builder.get_object("dialog_write")
         self.dialog_write.set_position(Gtk.WindowPosition.CENTER)
         self.dlg_lbl_format = self.builder.get_object("dlg_lbl_format")
         self.dlg_lbl_disk = self.builder.get_object("dlg_lbl_disk")
         self.dialog_about = self.builder.get_object("dialog_about")
 
-    # USB Methods
     def listUSBDevices(self):
-        deviceList = self.usbManager.getUSBDevices()
+        device_list = self.usbManager.getUSBDevices()
         self.list_devices.clear()
 
         active_id = ""
-        for device in deviceList:
-            self.list_devices.append(device)
+        for device in device_list:
+            # Model, Label ve Boyut
+            self.list_devices.append([device[0], device[1], device[2]])
             if self.dev_file is not None and device[0] in self.dev_file:
-                self.cmb_devices.set_active_id(device[0])
                 active_id = device[0]
 
         if active_id != "":
@@ -128,22 +132,17 @@ class MainWindow:
         else:
             self.cmb_devices.set_active(0)
 
-        if len(deviceList) == 0:
-            self.btn_start.set_sensitive(False)
-        else:
-            self.btn_start.set_sensitive(True)
+        self.btn_start.set_sensitive(len(device_list) > 0)
 
-    # UI Signals:
     def cmb_devices_changed(self, combobox):
         tree_iter = combobox.get_active_iter()
         if tree_iter:
             model = combobox.get_model()
-            deviceInfo = model[tree_iter][:3]
-            self.usbDevice = deviceInfo
+            self.usbDevice = list(model[tree_iter][:3])
+            self.btn_start.set_sensitive(True)
         else:
             self.btn_start.set_sensitive(False)
 
-    # Buttons:
     def on_txt_password_icon_press(self, entry, icon_pos, event):
         entry.set_visibility(True)
         entry.set_icon_from_icon_name(icon_pos, "view-conceal-symbolic")
@@ -156,7 +155,6 @@ class MainWindow:
         if self.formatting_rule_checks():
             self.pb_writingProgress.set_visible(self.cb_slowFormat.get_active())
             self.btn_cancelWriting.set_visible(self.cb_slowFormat.get_active())
-
             GLib.idle_add(self.prepare_writing)
 
     def btn_exit_clicked(self, button):
@@ -164,20 +162,34 @@ class MainWindow:
 
     def btn_write_new_file_clicked(self, button):
         self.stack_windows.set_visible_child_name("main")
+        self.listUSBDevices()
 
     def btn_information_clicked(self, button):
         self.dialog_about.run()
         self.dialog_about.hide()
 
     def btn_cancelWriting_clicked(self, button):
-        subprocess.call(["pkexec", "kill", "-SIGTERM", str(self.writerProcessPID)])
+        """İşbirlikçi iptal: stdin borusunu kapatır ve sinyal gönderir."""
+        self.cancelled = True
+        if self.writerStdin is not None:
+            try:
+                os.close(self.writerStdin)
+                self.writerStdin = None
+            except OSError:
+                pass
+        if self.writerProcessPID:
+            try:
+                os.kill(self.writerProcessPID, signal.SIGTERM)
+            except OSError:
+                pass
 
     def prepare_writing(self):
-        # Ask if it is ok?
-        selectedFormat = self.cmb_formats.get_model()[
-            self.cmb_formats.get_active_iter()
-        ][0]
-        self.dlg_lbl_format.set_markup(f"- <b>{selectedFormat}</b>")
+        selected_iter = self.cmb_formats.get_active_iter()
+        if not selected_iter:
+            return
+
+        selected_format = self.cmb_formats.get_model()[selected_iter][0]
+        self.dlg_lbl_format.set_markup(f"- <b>{selected_format}</b>")
         self.dlg_lbl_disk.set_markup(
             f"- <b>{self.usbDevice[1]} [ {self.usbDevice[2]} ]</b> <i>( /dev/{self.usbDevice[0]} )</i>"
         )
@@ -185,36 +197,40 @@ class MainWindow:
         response = self.dialog_write.run()
         self.dialog_write.hide()
         if response == Gtk.ResponseType.YES:
+            script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "USBFormatter.py")
             process_command = [
                 "pkexec",
-                os.path.dirname(os.path.abspath(__file__)) + "/USBFormatter.py",
+                script_path,
                 "--device",
                 self.usbDevice[0],
                 "--type",
-                selectedFormat,
+                selected_format,
                 "--label",
-                self.txt_deviceName.get_text(),
+                self.txt_deviceName.get_text().strip(),
             ]
             if self.cb_slowFormat.get_active():
-                process_command += ["--fill"]
+                process_command.append("--fill")
             if self.cb_encrypt.get_active():
                 process_command += ["--crypt", self.txt_password.get_text()]
+
+            self.cancelled = False
             self.startProcess(process_command)
             self.stack_windows.set_visible_child_name("waiting")
 
-    # Handling Image Writer process
     def startProcess(self, params):
-        self.writerProcessPID, _, stdout, _ = GLib.spawn_async(
+        self.writerProcessPID, stdin_fd, stdout_fd, _ = GLib.spawn_async(
             params,
             flags=GLib.SPAWN_SEARCH_PATH
             | GLib.SPAWN_LEAVE_DESCRIPTORS_OPEN
             | GLib.SPAWN_DO_NOT_REAP_CHILD,
-            standard_input=False,
+            standard_input=True,
             standard_output=True,
             standard_error=True,
         )
+        self.writerStdin = stdin_fd
+
         GLib.io_add_watch(
-            GLib.IOChannel(stdout),
+            GLib.IOChannel(stdout_fd),
             GLib.PRIORITY_LOW,
             GLib.IOCondition.IN | GLib.IOCondition.HUP | GLib.IOCondition.ERR,
             self.onProcessStdout,
@@ -224,130 +240,145 @@ class MainWindow:
         )
 
     def onProcessStdout(self, source, condition):
-        if condition == GLib.IOCondition.HUP or condition == GLib.IOCondition.ERR:
+        if condition & (GLib.IOCondition.HUP | GLib.IOCondition.ERR):
             return False
 
-        io_status, line, line_length, terminator_pos = source.read_line()
-        if io_status != GLib.IOStatus.NORMAL or line_length == 0:
+        io_status, line, _, _ = source.read_line()
+        if io_status != GLib.IOStatus.NORMAL or not line:
             return True
 
         line = line.strip()
-        if len(line) != 0 and line[0:8] == "PROGRESS":
-            writtenBytes = int(line.split("|")[1])
-            totalBytes = int(line.split("|")[2])
-            percent = writtenBytes / totalBytes
+        if line.startswith("PROGRESS"):
+            parts = line.split("|")
+            if len(parts) >= 3:
+                try:
+                    written_bytes = int(parts[1])
+                    total_bytes = int(parts[2])
+                    speed_mb = float(parts[3]) if len(parts) > 3 else 0.0
+                    eta_str = parts[4] if len(parts) > 4 else "--:--"
+                    percent = (written_bytes / total_bytes) if total_bytes > 0 else 0.0
 
-            self.pb_writingProgress.set_text(
-                "{}MB / {}MB (%{})".format(
-                    round(writtenBytes / 1000 / 1000),
-                    round(totalBytes / 1000 / 1000),
-                    int(percent * 100),
-                )
-            )
-            self.pb_writingProgress.set_fraction(percent)
+                    self.pb_writingProgress.set_text(
+                        f"{format_size(written_bytes)} / {format_size(total_bytes)} (%{int(percent * 100)}) | {speed_mb:.1f} MB/s | Kalan: {eta_str}"
+                    )
+                    self.pb_writingProgress.set_fraction(percent)
+                except (ValueError, IndexError):
+                    pass
 
         return True
 
     def onProcessExit(self, pid, status):
-        self.pb_writingProgress.set_fraction(0)
-        self.pb_writingProgress.set_text(_("Formatting"))
+        self.pb_writingProgress.set_fraction(0.0)
+        self.pb_writingProgress.set_text(_("Biçimlendiriliyor"))
+
+        if self.writerStdin is not None:
+            try:
+                os.close(self.writerStdin)
+            except OSError:
+                pass
+            self.writerStdin = None
 
         if status == 0:
             self.sendNotification(
-                _("Formatting is finished."), _("You can eject the USB disk.")
+                _("Biçimlendirme Tamamlandı."),
+                _("USB depolama aygıtını güvenle çıkarabilirsiniz."),
             )
             self.stack_windows.set_visible_child_name("finished")
-        elif status != 15 and status != 32256 and status != 32512:  # these are cancelling or auth error.
+        elif self.cancelled or status in (15, 32256, 32512):
+            self.stack_windows.set_visible_child_name("main")
+        else:
             dialog = Gtk.MessageDialog(
                 self.window,
                 0,
                 Gtk.MessageType.ERROR,
                 Gtk.ButtonsType.OK,
-                _("An error occured while formatting the disk."),
+                _("Diski biçimlendirirken bir hata oluştu."),
             )
             dialog.format_secondary_text(
                 _(
-                    "Please make sure the USB device is connected properly, not used by any program and try again."
+                    "Lütfen USB aygıtının doğru bağlandığından, başka bir uygulama tarafından kullanılmadığından emin olun ve tekrar deneyin."
                 )
             )
             dialog.run()
             dialog.destroy()
-            self.stack_windows.set_visible_child_name("finished")
-        else:
             self.stack_windows.set_visible_child_name("main")
 
     def sendNotification(self, title, body):
-        notification = Gio.Notification.new(title)
-        notification.set_body(body)
-        notification.set_icon(Gio.ThemedIcon(name="pardus-usb-formatter"))
-        notification.set_default_action("app.notification-response::focus")
-        self.application.send_notification(
-            self.application.get_application_id(), notification
-        )
+        try:
+            notification = Gio.Notification.new(title)
+            notification.set_body(body)
+            notification.set_icon(Gio.ThemedIcon(name="parslinux-formatter"))
+            self.application.send_notification("parslinux-formatter", notification)
+        except Exception:
+            pass
 
     def formatting_rule_checks(self):
-        selectedFormat = self.cmb_formats.get_model()[
-            self.cmb_formats.get_active_iter()
-        ][0]
-        newDeviceName = self.txt_deviceName.get_text()
+        active_iter = self.cmb_formats.get_active_iter()
+        if not active_iter:
+            return False
+
+        selected_format = self.cmb_formats.get_model()[active_iter][0]
+        device_name = self.txt_deviceName.get_text().strip()
 
         if self.cb_encrypt.get_active():
             if len(self.txt_password.get_text()) == 0:
                 self.show_error_dialog(
-                    _("Password required."),
-                    _("Please provide a password for encrypt."),
+                    _("Parola gerekli."),
+                    _("Lütfen LUKS şifreleme için bir parola girin."),
                 )
                 return False
 
-
-        if selectedFormat == "FAT32":
-            if len(newDeviceName) > 11:
+        if selected_format == "FAT32":
+            if len(device_name) > 11:
                 self.show_error_dialog(
-                    _("Device name is too long."),
-                    _(
-                        "{} format supports maximum {} characters.".format(
-                            "FAT32", "11"
-                        )
-                    ),
+                    _("Aygıt adı çok uzun."),
+                    _("FAT32 biçimi en fazla 11 karakter destekler."),
                 )
                 return False
-
             try:
-                newDeviceName.encode("cp850", errors="strict")
+                device_name.encode("cp850", errors="strict")
             except ValueError:
                 self.show_error_dialog(
-                    _("Device name contains invalid characters."),
-                    _("FAT32 format only supports ASCII characters."),
-                )
-                return False
-        elif selectedFormat == "NTFS":
-            if len(newDeviceName) > 32:
-                self.show_error_dialog(
-                    _("Device name is too long."),
-                    _("{} format supports maximum {} characters.".format("NTFS", "32")),
+                    _("Geçersiz karakterler."),
+                    _("FAT32 biçimi yalnızca ASCII karakterleri destekler."),
                 )
                 return False
 
-        elif selectedFormat == "EXFAT":
-            if len(newDeviceName) > 11:
+        elif selected_format == "NTFS":
+            if len(device_name) > 32:
                 self.show_error_dialog(
-                    _("Device name is too long."),
-                    _(
-                        "{} format supports maximum {} characters.".format(
-                            "EXFAT", "11"
-                        )
-                    ),
-                )
-                return False
-        elif selectedFormat == "EXT4":
-            if len(newDeviceName) > 16:
-                self.show_error_dialog(
-                    _("Device name is too long."),
-                    _("{} format supports maximum {} characters.".format("EXT4", "16")),
+                    _("Aygıt adı çok uzun."),
+                    _("NTFS biçimi en fazla 32 karakter destekler."),
                 )
                 return False
 
-        # Everything is ok:
+        elif selected_format == "EXFAT":
+            if len(device_name) > 15:
+                self.show_error_dialog(
+                    _("Aygıt adı çok uzun."),
+                    _("exFAT biçimi en fazla 15 karakter destekler."),
+                )
+                return False
+
+        elif selected_format == "EXT4":
+            if len(device_name) > 16:
+                self.show_error_dialog(
+                    _("Aygıt adı çok uzun."),
+                    _("EXT4 biçimi en fazla 16 karakter destekler."),
+                )
+                return False
+
+        # 5 Kademeli Güvenlik Kontrolü
+        if self.usbDevice:
+            try:
+                validate_usb_drive(self.usbDevice[0])
+            except DriveError as err:
+                self.show_error_dialog(
+                    _("Güvenlik İhlali"),
+                    str(err),
+                )
+                return False
+
         return True
 
     def show_error_dialog(self, primary, secondary):

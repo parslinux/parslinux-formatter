@@ -1,84 +1,100 @@
 #!/usr/bin/env python3
+"""ParsLinux Formatter - setup.py paket kurulum yapılandırması."""
+
 import os
 import subprocess
-
 from setuptools import setup, find_packages
+
+changelog = "debian/changelog"
+version = "1.0.0"
+if os.path.exists(changelog):
+    try:
+        head = open(changelog).readline()
+        version = head.split("(")[1].split(")")[0]
+    except Exception:
+        pass
+
+# src/__version__ dosyasını güncelle
+with open("src/__version__", "w") as f:
+    f.write(version)
 
 
 def create_mo_files():
     podir = "po"
     mo = []
+    if not os.path.isdir(podir):
+        return mo
+
     for po in os.listdir(podir):
         if po.endswith(".po"):
-            os.makedirs(
-                "{}/{}/LC_MESSAGES".format(podir, po.split(".po")[0]), exist_ok=True
-            )
-            mo_file = "{}/{}/LC_MESSAGES/{}".format(
-                podir, po.split(".po")[0], "pardus-usb-formatter.mo"
-            )
-            msgfmt_cmd = "msgfmt {} -o {}".format(podir + "/" + po, mo_file)
+            lang = po.split(".po")[0]
+            os.makedirs(f"{podir}/{lang}/LC_MESSAGES", exist_ok=True)
+            mo_file = f"{podir}/{lang}/LC_MESSAGES/parslinux-formatter.mo"
+            msgfmt_cmd = f"msgfmt {podir}/{po} -o {mo_file}"
             subprocess.call(msgfmt_cmd, shell=True)
             mo.append(
                 (
-                    "/usr/share/locale/" + po.split(".po")[0] + "/LC_MESSAGES",
-                    [
-                        "po/"
-                        + po.split(".po")[0]
-                        + "/LC_MESSAGES/pardus-usb-formatter.mo"
-                    ],
+                    f"/usr/share/locale/{lang}/LC_MESSAGES",
+                    [mo_file],
                 )
             )
     return mo
 
 
-changelog = "debian/changelog"
-version = "0.5.0"
-if os.path.exists(changelog):
-    head = open(changelog).readline()
-    try:
-        version = head.split("(")[1].split(")")[0]
-    except Exception:
-        print("debian/changelog format is wrong for get version")
-    f = open("src/__version__", "w")
-    f.write(version)
-    f.close()
-
 data_files = [
-    ("/usr/share/applications/", ["tr.org.pardus.usb-formatter.desktop"]),
+    ("/usr/share/applications/", ["tr.org.parslinux.formatter.desktop"]),
     (
-        "/usr/share/pardus/pardus-usb-formatter/",
-        ["pardus-usb-formatter.svg", "main.svg"],
+        "/usr/share/parslinux/parslinux-formatter/assets",
+        [
+            "assets/parslinux-formatter.svg",
+            "assets/main.svg",
+            "assets/disk.svg",
+            "assets/format.svg",
+        ],
     ),
     (
-        "/usr/share/pardus/pardus-usb-formatter/src",
+        "/usr/share/parslinux/parslinux-formatter/src",
         [
             "src/Main.py",
             "src/MainWindow.py",
+            "src/ModernWindow.py",
+            "src/CLI.py",
             "src/USBFormatter.py",
             "src/USBDeviceManager.py",
+            "src/Utils.py",
             "src/__version__",
         ],
     ),
-    ("/usr/share/pardus/pardus-usb-formatter/ui", ["ui/MainWindow.glade"]),
+    ("/usr/share/parslinux/parslinux-formatter/ui", ["ui/MainWindow.glade"]),
     (
         "/usr/share/polkit-1/actions",
-        ["tr.org.pardus.pkexec.pardus-usb-formatter.policy"],
+        ["tr.org.parslinux.pkexec.parslinux-formatter.policy"],
     ),
-    ("/usr/bin/", ["pardus-usb-formatter"]),
-    ("/usr/share/icons/hicolor/scalable/apps/", ["pardus-usb-formatter.svg"]),
+    (
+        "/usr/bin/",
+        ["parslinux-formatter", "parslinux-formatter-cli", "parslinux-formatter-gtk4"],
+    ),
+    (
+        "/usr/share/icons/hicolor/scalable/apps/",
+        ["assets/parslinux-formatter.svg"],
+    ),
+    (
+        "/usr/share/metainfo",
+        ["tr.org.parslinux.Formatter.metainfo.xml"],
+    ),
 ] + create_mo_files()
 
 setup(
-    name="Pardus USB Formatter",
+    name="ParsLinux Formatter",
     version=version,
     packages=find_packages(),
-    scripts=["pardus-usb-formatter"],
+    scripts=["parslinux-formatter", "parslinux-formatter-cli", "parslinux-formatter-gtk4"],
     install_requires=["PyGObject"],
     data_files=data_files,
-    author="Emin Fedar",
-    author_email="emin.fedar@pardus.org.tr",
-    description="Pardus USB Formatter.",
+    author="ParsLinux Developers",
+    author_email="dev@pars.org.tr",
+    description="High-performance, secure USB drive formatting utility for ParsLinux.",
     license="GPLv3",
-    keywords="usb format pardus",
-    url="https://github.com/pardus/pardus-usb-formatter",
+    keywords="usb format fat32 ntfs exfat ext4 btrfs f2fs pars parslinux",
+    url="https://github.com/parslinux/parslinux-formatter",
 )

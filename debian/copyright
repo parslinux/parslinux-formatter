@@ -1,11 +1,11 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: pardus-usb-formatter
-Upstream-Contact: Fatih Altun <fatih.altun@pardus.org.tr>
-Source: https://github.com/pardus/pardus-usb-formatter
-
+Upstream-Name: parslinux-formatter
+Upstream-Contact: ParsLinux Developers <dev@pars.org.tr>
+Source: https://github.com/parslinux/parslinux-formatter
 
 Files: *
-Copyright: 2024, Pardus <dev@pardus.org.tr>
+Copyright: 2026, ParsLinux Developers <dev@pars.org.tr>
+           2016-2024, Pardus Developers
 License: GPL-3.0+
 
 License: GPL-3.0+
@@ -24,5 +24,3 @@ License: GPL-3.0+
  .
  On Debian systems, the complete text of the GNU General
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
-
-

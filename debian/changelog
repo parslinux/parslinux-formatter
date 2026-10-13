@@ -1,3 +1,16 @@
+parslinux-formatter (1.0.0) unstable; urgency=medium
+
+  * Initial release of ParsLinux Formatter v1.0.0.
+  * Added modern GTK4 / Libadwaita user interface (parslinux-formatter-gtk4).
+  * Added headless command-line interface (parslinux-formatter-cli).
+  * Added 5-layer kernel disk protection engine for system drives.
+  * Added universal filesystem support: FAT32, NTFS, exFAT, EXT4, BTRFS, XFS, F2FS.
+  * Added 4 MiB high-speed dynamic zero-fill and hardware TRIM (blkdiscard).
+  * Added LUKS2 modern volume encryption.
+  * Rebranded to ParsLinux with 100% royalty-free vector SVG assets.
+
+ -- ParsLinux Dev <dev@pars.org.tr>  Tue, 13 Oct 2026 16:30:00 +0300
+
 pardus-usb-formatter (0.7.1) unstable; urgency=medium
 
   [ Hugo Carvalho ]

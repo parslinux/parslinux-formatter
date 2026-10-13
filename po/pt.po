@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-15 00:03+0300\n"
+"POT-Creation-Date: 2026-10-13 16:36+0300\n"
 "PO-Revision-Date: 2026-07-17 16:14+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <hugokarvalho@hotmail.com>\n"
@@ -23,19 +23,19 @@ msgid "Format USB Devices easily."
 msgstr "Formate dispositivos USB com facilidade."
 
 #. Name Surname <example@examplemail.com>
-#: ui/MainWindow.glade:18
+#: ui/MainWindow.glade:17
 msgid "translator-credits"
 msgstr "Hugo Carvalho <hugokarvalho@hotmail.com>"
 
-#: ui/MainWindow.glade:53
+#: ui/MainWindow.glade:51
 msgid "Are you sure?"
 msgstr "Tem a certeza?"
 
-#: ui/MainWindow.glade:137
+#: ui/MainWindow.glade:135
 msgid "Will be formatted as:"
 msgstr "Será formatado como:"
 
-#: ui/MainWindow.glade:177
+#: ui/MainWindow.glade:175
 msgid ""
 "<b>WARNING:</b>\n"
 "All the personal data on the device will be deleted.\n"
@@ -45,27 +45,29 @@ msgstr ""
 "Todos os dados pessoais do dispositivo serão eliminados.\n"
 "Quer continuar?"
 
-#: ui/MainWindow.glade:242 ui/MainWindow.glade:825 src/MainWindow.py:63
-msgid "Pardus USB Formatter"
+#: ui/MainWindow.glade:240 ui/MainWindow.glade:825
+#, fuzzy
+msgid "ParsLinux Formatter"
 msgstr "Formatador USB Pardus"
 
-#: ui/MainWindow.glade:280
-msgid "<b><big>Pardus USB Formatter</big></b>"
+#: ui/MainWindow.glade:278
+#, fuzzy
+msgid "<b><big>ParsLinux Formatter</big></b>"
 msgstr "<b><big>Formatador USB Pardus</big></b>"
 
-#: ui/MainWindow.glade:436
+#: ui/MainWindow.glade:434
 msgid "New Device Name"
 msgstr "Nome do novo dispositivo"
 
-#: ui/MainWindow.glade:453
+#: ui/MainWindow.glade:451
 msgid "Slow Format (Set all bytes to 0)"
 msgstr "Formatação lenta (Definir todos os bytes para 0)"
 
-#: ui/MainWindow.glade:503
+#: ui/MainWindow.glade:501
 msgid "Encrypt Disk"
 msgstr "Encriptar disco"
 
-#: ui/MainWindow.glade:546
+#: ui/MainWindow.glade:544
 msgid "Disk password"
 msgstr "Palavra-passe do disco"
 
@@ -73,7 +75,7 @@ msgstr "Palavra-passe do disco"
 msgid "Start"
 msgstr "Iniciar"
 
-#: ui/MainWindow.glade:644 src/MainWindow.py:245
+#: ui/MainWindow.glade:644
 msgid "Formatting"
 msgstr "A formatar"
 
@@ -85,11 +87,11 @@ msgstr "Isto pode demorar algum tempo."
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ui/MainWindow.glade:746 src/MainWindow.py:249
+#: ui/MainWindow.glade:746
 msgid "Formatting is finished."
 msgstr "A formatação está concluída."
 
-#: ui/MainWindow.glade:772 src/MainWindow.py:249
+#: ui/MainWindow.glade:772
 msgid "You can eject the USB disk."
 msgstr "Pode ejetar o disco USB."
 
@@ -101,47 +103,108 @@ msgstr "Sair"
 msgid "Format another device."
 msgstr "Formatar outro dispositivo."
 
-#: src/MainWindow.py:67
-msgid "About Pardus USB Formatter"
-msgstr "Acerca do Formatador USB Pardus"
+#: src/MainWindow.py:69
+#, fuzzy
+msgid "ParsLinux USB Formatter"
+msgstr "Formatador USB Pardus"
 
-#: src/MainWindow.py:258
-msgid "An error occured while formatting the disk."
-msgstr "Ocorreu um erro durante a formatação do disco."
-
-#: src/MainWindow.py:262
-msgid ""
-"Please make sure the USB device is connected properly, not used by any "
-"program and try again."
+#: src/MainWindow.py:75
+msgid "Hakkında — ParsLinux USB Biçimlendirici"
 msgstr ""
-"Certifique-se de que o dispositivo USB está ligado corretamente, não é "
-"utilizado por nenhum programa e tente novamente."
 
-#: src/MainWindow.py:289
-msgid "Password required."
-msgstr "É necessária uma palavra-passe."
+#: src/MainWindow.py:272
+msgid "Biçimlendiriliyor"
+msgstr ""
 
-#: src/MainWindow.py:290
-msgid "Please provide a password for encrypt."
-msgstr "Introduza uma palavra-passe para a encriptação."
+#: src/MainWindow.py:283
+msgid "Biçimlendirme Tamamlandı."
+msgstr ""
 
-#: src/MainWindow.py:298 src/MainWindow.py:318 src/MainWindow.py:326
-#: src/MainWindow.py:337
-msgid "Device name is too long."
-msgstr "O nome do dispositivo é muito comprido."
+#: src/MainWindow.py:284
+msgid "USB depolama aygıtını güvenle çıkarabilirsiniz."
+msgstr ""
 
-#: src/MainWindow.py:300 src/MainWindow.py:319 src/MainWindow.py:328
-#: src/MainWindow.py:338
-msgid "{} format supports maximum {} characters."
-msgstr "o formato {} suporta no máximo {} caracteres."
+#: src/MainWindow.py:295
+msgid "Diski biçimlendirirken bir hata oluştu."
+msgstr ""
 
-#: src/MainWindow.py:311
-msgid "Device name contains invalid characters."
-msgstr "O nome do dispositivo contém caracteres inválidos."
+#: src/MainWindow.py:299
+msgid ""
+"Lütfen USB aygıtının doğru bağlandığından, başka bir uygulama tarafından "
+"kullanılmadığından emin olun ve tekrar deneyin."
+msgstr ""
 
-#: src/MainWindow.py:312
-msgid "FAT32 format only supports ASCII characters."
-msgstr "O formato FAT32 suporta apenas caracteres ASCII."
+#: src/MainWindow.py:326
+msgid "Parola gerekli."
+msgstr ""
+
+#: src/MainWindow.py:327
+msgid "Lütfen LUKS şifreleme için bir parola girin."
+msgstr ""
+
+#: src/MainWindow.py:334 src/MainWindow.py:350 src/MainWindow.py:358
+#: src/MainWindow.py:366
+msgid "Aygıt adı çok uzun."
+msgstr ""
+
+#: src/MainWindow.py:335
+msgid "FAT32 biçimi en fazla 11 karakter destekler."
+msgstr ""
+
+#: src/MainWindow.py:342
+msgid "Geçersiz karakterler."
+msgstr ""
+
+#: src/MainWindow.py:343
+msgid "FAT32 biçimi yalnızca ASCII karakterleri destekler."
+msgstr ""
+
+#: src/MainWindow.py:351
+msgid "NTFS biçimi en fazla 32 karakter destekler."
+msgstr ""
+
+#: src/MainWindow.py:359
+msgid "exFAT biçimi en fazla 15 karakter destekler."
+msgstr ""
+
+#: src/MainWindow.py:367
+msgid "EXT4 biçimi en fazla 16 karakter destekler."
+msgstr ""
+
+#: src/MainWindow.py:377
+msgid "Güvenlik İhlali"
+msgstr ""
+
+#~ msgid "About Pardus USB Formatter"
+#~ msgstr "Acerca do Formatador USB Pardus"
+
+#~ msgid "An error occured while formatting the disk."
+#~ msgstr "Ocorreu um erro durante a formatação do disco."
+
+#~ msgid ""
+#~ "Please make sure the USB device is connected properly, not used by any "
+#~ "program and try again."
+#~ msgstr ""
+#~ "Certifique-se de que o dispositivo USB está ligado corretamente, não é "
+#~ "utilizado por nenhum programa e tente novamente."
+
+#~ msgid "Password required."
+#~ msgstr "É necessária uma palavra-passe."
+
+#~ msgid "Please provide a password for encrypt."
+#~ msgstr "Introduza uma palavra-passe para a encriptação."
+
+#~ msgid "Device name is too long."
+#~ msgstr "O nome do dispositivo é muito comprido."
+
+#~ msgid "{} format supports maximum {} characters."
+#~ msgstr "o formato {} suporta no máximo {} caracteres."
+
+#~ msgid "Device name contains invalid characters."
+#~ msgstr "O nome do dispositivo contém caracteres inválidos."
+
+#~ msgid "FAT32 format only supports ASCII characters."
+#~ msgstr "O formato FAT32 suporta apenas caracteres ASCII."
 
 #~ msgid "About"
 #~ msgstr "Acerca"

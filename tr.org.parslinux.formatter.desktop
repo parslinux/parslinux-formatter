@@ -1,0 +1,26 @@
+[Desktop Entry]
+Name=ParsLinux Formatter
+Name[tr]=ParsLinux USB Biçimlendirici
+GenericName=USB Formatter
+GenericName[tr]=USB Biçimlendirici
+Comment=Format USB flash drives easily and securely
+Comment[tr]=USB bellekleri kolay ve güvenli biçimde biçimlendirin
+Exec=parslinux-formatter %f
+Icon=parslinux-formatter
+Terminal=false
+Type=Application
+Categories=System;X-Pars-Apps;Utility;
+Keywords=usb;format;fat32;ntfs;exfat;ext4;btrfs;f2fs;luks;disk;
+StartupNotify=true
+StartupWMClass=tr.org.parslinux.formatter
+Actions=GTK4;CLI;
+
+[Desktop Action GTK4]
+Name=Open in Modern Mode (GTK4)
+Name[tr]=Modern Modda Aç (GTK4)
+Exec=parslinux-formatter-gtk4
+
+[Desktop Action CLI]
+Name=Open in Terminal (CLI)
+Name[tr]=Uçbirimde Aç (CLI)
+Exec=x-terminal-emulator -e parslinux-formatter-cli -i

@@ -1,18 +1,33 @@
-Source: pardus-usb-formatter
+Source: parslinux-formatter
 Section: utils
 Priority: optional
-Maintainer: Pardus Dev <dev@pardus.org.tr>
+Maintainer: ParsLinux Dev <dev@pars.org.tr>
 Build-Depends: debhelper-compat (= 13), dh-python, python3-all, python3-setuptools
 Standards-Version: 4.6.1
-Homepage: https://github.com/pardus/pardus-usb-formatter
+Homepage: https://github.com/parslinux/parslinux-formatter
 
-Package: pardus-usb-formatter
+Package: parslinux-formatter
 Architecture: all
 Depends: ${misc:Depends},
          ${python3:Depends},
-         python3 (>=3.5),
+         python3 (>=3.8),
          python3-gi,
          python3-pyudev,
-         gir1.2-gtk-3.0
-Description: Simple Gtk+ and Python based USB Formatter
- Format your USB storage devices easily with Pardus USB Formatter's simple GUI.
+         gir1.2-gtk-3.0,
+         gir1.2-gtk-4.0,
+         gir1.2-adwaita-1,
+         dosfstools,
+         ntfs-3g,
+         exfatprogs,
+         e2fsprogs,
+         btrfs-progs,
+         xfsprogs,
+         f2fs-tools,
+         cryptsetup,
+         parted,
+         util-linux,
+         policykit-1
+Description: High-performance USB drive partitioning and formatting utility
+ ParsLinux Formatter is a powerful, safe and multi-interface USB storage
+ formatting utility for ParsLinux, supporting FAT32, NTFS, exFAT, EXT4,
+ BTRFS, XFS, and F2FS with 5-layer kernel disk protection.

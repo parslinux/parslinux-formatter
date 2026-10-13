@@ -1,2 +1,5 @@
 ui/MainWindow.glade
 src/MainWindow.py
+src/ModernWindow.py
+src/CLI.py
+src/USBFormatter.py

@@ -1,0 +1,22 @@
+#!/usr/bin/python3
+"""ParsLinux Formatter - GTK4 & Libadwaita Modern Arayüz Başlatıcısı."""
+
+import os
+import sys
+
+app_dir = os.path.dirname(os.path.abspath(__file__))
+installed_dir = "/usr/share/parslinux/parslinux-formatter/src"
+
+if os.path.isdir(os.path.join(app_dir, "src")):
+    sys.path.insert(0, os.path.join(app_dir, "src"))
+elif os.path.isdir(installed_dir):
+    sys.path.insert(0, installed_dir)
+
+import gi
+gi.require_version("Gtk", "4.0")
+gi.require_version("Adw", "1")
+from ModernWindow import Application
+
+if __name__ == "__main__":
+    app = Application()
+    sys.exit(app.run(sys.argv))

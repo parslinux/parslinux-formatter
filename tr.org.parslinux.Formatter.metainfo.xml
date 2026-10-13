@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>tr.org.parslinux.formatter</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>ParsLinux Formatter</name>
+  <name xml:lang="tr">ParsLinux USB Biçimlendirici</name>
+  <summary>High-performance, secure USB drive formatting utility</summary>
+  <summary xml:lang="tr">Yüksek hızlı ve güvenli USB disk biçimlendirme aracı</summary>
+  <description>
+    <p>
+      ParsLinux Formatter is a powerful and secure disk partitioning and formatting utility
+      for GNU/Linux systems. It provides support for FAT32, NTFS, exFAT, EXT4, BTRFS, XFS,
+      and F2FS filesystems with hardware-level system disk protection and high-speed zero-fill capabilities.
+    </p>
+    <p xml:lang="tr">
+      ParsLinux Formatter; FAT32, NTFS, exFAT, EXT4, BTRFS, XFS ve F2FS dosya sistemlerini destekleyen,
+      5 kademeli çekirdek disk korumasına ve yüksek hızlı tamponlu sıfırlama motoruna sahip modern
+      bir USB disk biçimlendirme aracıdır.
+    </p>
+  </description>
+  <launchable type="desktop-id">tr.org.parslinux.formatter.desktop</launchable>
+  <url type="homepage">https://pars.org.tr</url>
+  <url type="bugtracker">https://github.com/parslinux/parslinux-formatter/issues</url>
+  <provides>
+    <binary>parslinux-formatter</binary>
+    <binary>parslinux-formatter-gtk4</binary>
+    <binary>parslinux-formatter-cli</binary>
+  </provides>
+  <releases>
+    <release version="1.0.0" date="2026-10-13">
+      <description>
+        <p>Initial release of ParsLinux Formatter with GTK4/Libadwaita, Headless CLI and 5-layer safety engine.</p>
+      </description>
+    </release>
+  </releases>
+  <content_rating type="oars-1.1"/>
+</component>

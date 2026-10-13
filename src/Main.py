@@ -1,34 +1,46 @@
 #!/usr/bin/python3
+"""ParsLinux Formatter — Klasik GTK3 Uygulama Yaşam Döngüsü (Main.py)."""
 
 import sys
 import gi
 
-gi.require_version('Gtk', '3.0')
+gi.require_version("Gtk", "3.0")
 from gi.repository import Gio, Gtk, GLib
 
 from MainWindow import MainWindow
 
+APP_ID = "tr.org.parslinux.formatter"
+
 
 class Application(Gtk.Application):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, application_id="tr.org.pardus.usb-formatter",
-                         flags=Gio.ApplicationFlags.HANDLES_OPEN | Gio.ApplicationFlags.NON_UNIQUE, **kwargs)
+        super().__init__(
+            *args,
+            application_id=APP_ID,
+            flags=Gio.ApplicationFlags.HANDLES_OPEN | Gio.ApplicationFlags.NON_UNIQUE,
+            **kwargs,
+        )
         self.window = None
-        GLib.set_prgname("tr.org.pardus.usb-formatter")
+        GLib.set_prgname(APP_ID)
 
     def do_activate(self):
-        self.window = MainWindow(self)
+        if not self.window:
+            self.window = MainWindow(self)
+        self.window.window.present()
 
     def do_open(self, files, filecount, hint):
-        if filecount == 1:
-            file = files[0]
-            if "/dev" in file.get_path():
-                self.window = MainWindow(self, file.get_path())
+        if filecount >= 1:
+            file_path = files[0].get_path()
+            if "/dev" in file_path:
+                self.window = MainWindow(self, file_path)
             else:
-                print("Only /dev/ files")
+                self.window = MainWindow(self)
         else:
-            print("Only one file.")
+            self.window = MainWindow(self)
+        self.window.window.present()
 
 
 app = Application()
-app.run(sys.argv)
+
+if __name__ == "__main__":
+    app.run(sys.argv)

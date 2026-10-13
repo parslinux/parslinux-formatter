@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Background Squircle Gradient -->
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+
+    <!-- Ambient Cyan Glow -->
+    <radialGradient id="ambient-glow" cx="30%" cy="25%" r="70%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.4"/>
+      <stop offset="60%" stop-color="#0284c7" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- USB Metallic Body -->
+    <linearGradient id="usb-body" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <linearGradient id="usb-metal" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#94a3b8"/>
+      <stop offset="30%" stop-color="#cbd5e1"/>
+      <stop offset="70%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+
+    <!-- Glowing Format Ring -->
+    <linearGradient id="format-ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+
+    <filter id="glow-filter" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Squircle Base -->
+  <rect x="8" y="8" width="112" height="112" rx="26" fill="url(#bg-grad)" stroke="#334155" stroke-width="1.5"/>
+  <rect x="8" y="8" width="112" height="112" rx="26" fill="url(#ambient-glow)"/>
+
+  <!-- USB Plug (Top Connector) -->
+  <g filter="url(#shadow)">
+    <rect x="48" y="20" width="32" height="24" rx="3" fill="url(#usb-metal)" stroke="#64748b" stroke-width="1"/>
+    <!-- USB Inside Holes -->
+    <rect x="54" y="26" width="6" height="8" rx="1.5" fill="#1e293b"/>
+    <rect x="68" y="26" width="6" height="8" rx="1.5" fill="#1e293b"/>
+    <!-- Connector Gold Pins -->
+    <line x1="56" y1="28" x2="56" y2="32" stroke="#f59e0b" stroke-width="1.5"/>
+    <line x1="70" y1="28" x2="70" y2="32" stroke="#f59e0b" stroke-width="1.5"/>
+  </g>
+
+  <!-- USB Main Chassis -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="40" width="48" height="66" rx="8" fill="url(#usb-body)" stroke="#475569" stroke-width="1.5"/>
+    <!-- Accent Ridge Line -->
+    <line x1="42" y1="48" x2="86" y2="48" stroke="#06b6d4" stroke-width="1.5" stroke-opacity="0.8"/>
+    <!-- Activity LED -->
+    <circle cx="64" cy="56" r="2.5" fill="#38bdf8" filter="url(#glow-filter)"/>
+  </g>
+
+  <!-- Format / Partition Circular Badge -->
+  <g transform="translate(68, 64)" filter="url(#glow-filter)">
+    <circle cx="24" cy="24" r="22" fill="#0f172a" stroke="url(#format-ring)" stroke-width="2.5"/>
+    <circle cx="24" cy="24" r="18" fill="#1e293b" fill-opacity="0.9"/>
+    
+    <!-- Refresh / Format Arrows -->
+    <path d="M 24 12 A 12 12 0 0 1 36 24 L 33 24 A 9 9 0 0 0 24 15 Z" fill="#38bdf8"/>
+    <polygon points="36,20 40,24 33,27" fill="#38bdf8"/>
+
+    <path d="M 24 36 A 12 12 0 0 1 12 24 L 15 24 A 9 9 0 0 0 24 33 Z" fill="#10b981"/>
+    <polygon points="12,28 8,24 15,21" fill="#10b981"/>
+
+    <!-- Central Sparkle / Star (Pars Leopard Cyber Icon) -->
+    <circle cx="24" cy="24" r="3" fill="#f8fafc"/>
+  </g>
+</svg>
