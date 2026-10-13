@@ -50,6 +50,7 @@ data_files = [
             "assets/main.svg",
             "assets/disk.svg",
             "assets/format.svg",
+            "assets/logo.svg",
         ],
     ),
     (

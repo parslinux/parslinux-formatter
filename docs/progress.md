@@ -95,3 +95,12 @@ Bu belge, **ParsLinux Formatter** (`parslinux-formatter`) projesinin geliştirme
 - [x] `debian/control`, `debian/changelog`, `debian/copyright` ve lintian kuralları güncellendi.
 - [x] `tests/test_formatter.py` birim testleri yazılarak %100 başarıyla çalıştırıldı (8/8 passed).
 - [x] `update-translations.sh` çalıştırılarak `po/` dosyaları senkronize edildi.
+
+### [x] Faz 8: Marka Logosu Entegrasyonu ve 2x HiDPI Ekran Görüntüleri
+- [x] Resmi ParsLinux leopar vektör amblemi `assets/logo.svg` olarak entegre edildi.
+- [x] Uygulama simgesi `assets/parslinux-formatter.svg` Pars amblemi ve parlak biçimlendirme rozetiyle yenilendi.
+- [x] GTK3 üst afişi `assets/main.svg` ParsLinux leopar tasarımı ve temiz USB dönüşüm illüstrasyonu ile baştan tasarlandı.
+- [x] `ui/MainWindow.glade` içerisindeki resim yolu `../assets/main.svg` olarak ve telif hakkı etiketi `© Pars Developers` olarak güncellendi.
+- [x] `screenshots/parslinux-formatter-gtk3.png` ve `screenshots/parslinux-formatter-gtk4.png` 2x HiDPI çözünürlükte, gerçekçi aygıt verileri ve gölge çerçeveleriyle baştan üretildi; eski miras ekran görüntüleri tamamen temizlendi.
+- [x] `setup.py` dosyasına `assets/logo.svg` kurulum kuralı eklendi.
+
